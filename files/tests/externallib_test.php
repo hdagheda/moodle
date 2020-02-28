@@ -293,4 +293,42 @@ class core_files_externallib_testcase extends advanced_testcase {
 
         $this->assertEquals($testfilelisting, $testdata);
     }
+
+    /**
+     * Test upload file with trigger event - file uploaded
+     */
+    public function test_file_uploaded_event() {
+        global $USER;
+
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $context = context_user::instance($USER->id);
+        $contextid = $context->id;
+        $component = "user";
+        $filearea = "draft";
+        $itemid = 0;
+        $filepath = "/";
+        $filename = "Simple.txt";
+        $filecontent = base64_encode("Let us create a nice simple file");
+        $contextlevel = null;
+        $instanceid = null;
+        $browser = get_file_browser();
+
+        // Make sure no file exists.
+        $file = $browser->get_file_info($context, $component, $filearea, $itemid, $filepath, $filename);
+        $this->assertEmpty($file);
+
+        $sink = $this->redirectEvents();
+
+        // Call the api to create a file.
+        $fileinfo = core_files_external::upload($contextid, $component, $filearea, $itemid, $filepath,
+                $filename, $filecontent, $contextlevel, $instanceid);
+
+        $events = $sink->get_events();
+
+        $sink->close();
+        $event = array_pop($events);
+
+        $this->assertInstanceOf('\core_files\event\file_uploaded', $event);
+    }
 }

@@ -353,14 +353,30 @@ class core_files_external extends external_api {
             $info = $dir->create_file_from_pathname($filename, $savedfilepath);
             $params = $info->get_params();
             unlink($savedfilepath);
+
+            // Trigger event for file upload.
+            \core_files\event\file_uploaded::create(
+                array(
+                    'contextid' => $params['contextid'],
+                    'other' => array(
+                        'component' => $params['component'],
+                        'filearea' => $params['filearea'],
+                        'itemid' => $params['itemid'],
+                        'filepath' => $params['filepath'],
+                        'filename' => $params['filename'],
+                        'url' => $info->get_url(),
+                    )
+                )
+            )->trigger();
+
             return array(
-                'contextid'=>$params['contextid'],
-                'component'=>$params['component'],
-                'filearea'=>$params['filearea'],
-                'itemid'=>$params['itemid'],
-                'filepath'=>$params['filepath'],
-                'filename'=>$params['filename'],
-                'url'=>$info->get_url()
+                'contextid' => $params['contextid'],
+                'component' => $params['component'],
+                'filearea' => $params['filearea'],
+                'itemid' => $params['itemid'],
+                'filepath' => $params['filepath'],
+                'filename' => $params['filename'],
+                'url' => $info->get_url()
                 );
         } else {
             throw new moodle_exception('nofile');
