@@ -32,8 +32,8 @@ use Behat\Mink\Exception\ExpectationException as ExpectationException,
     Behat\Mink\Exception\DriverException as DriverException,
     WebDriver\Exception\NoSuchElement as NoSuchElement,
     WebDriver\Exception\StaleElementReference as StaleElementReference,
-    Behat\Gherkin\Node\TableNode as TableNode;
-
+    Behat\Gherkin\Node\TableNode as TableNode,
+    Behat\Mink\Driver\Selenium2Driver;
 /**
  * Cross component steps definitions.
  *
@@ -1948,5 +1948,125 @@ EOF;
     public function i_visit($localurl): void {
         $localurl = new moodle_url($localurl);
         $this->getSession()->visit($this->locate_path($localurl->out_as_local_url(false)));
+    }
+
+    /**
+     * I open a new window at
+     *
+     * @When I open a new window at :url
+     *
+     * @param   string  $url
+     * @return  FeatureContext
+     * @throws Exception
+     */
+    public function i_open_a_new_window_at(string $url): self {
+        $driver = $this->getSession()->getDriver();
+
+        if (!$driver instanceof Selenium2Driver) {
+            return $this;
+        }
+        $url = new moodle_url($url);
+        $driver->executeScript("window.open('" . $url->out(false) . "','_blank');");
+
+        // We are using same internal function to get windownames hence passing second argument as true.
+        $this->i_switch_to_the_window(count($driver->getWindowNames()), true);
+
+        return $this;
+    }
+
+    /**
+     * I switch to the previous window
+     *
+     * @When I switch to the previous window
+     *
+     * @return  FeatureContext
+     * @throws  Exception If only one window is open.
+     */
+    public function i_switch_to_the_previous_window(): self {
+        $driver = $this->getSession()->getDriver();
+
+        if (!$driver instanceof Selenium2Driver) {
+            return $this;
+        }
+
+        $windownames = $driver->getWindowNames();
+        $currentwindow = array_search($driver->getWindowName(), $windownames);
+
+        if (count($windownames) == 1) {
+            throw new \Exception("Error : only one window is open.");
+        }
+
+        if ($currentwindow === 0) {
+            $driver->switchToWindow($windownames[count($windownames) - 1]);
+        } else {
+            $driver->switchToWindow($windownames[$currentwindow - 1]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * I switch to the next window
+     *
+     * @When I switch to the next window
+     *
+     * @return  FeatureContext
+     * @throws  Exception If only one window is open.
+     */
+    public function i_switch_to_the_next_window() {
+        $driver = $this->getSession()->getDriver();
+
+        if (!$driver instanceof Selenium2Driver) {
+            return $this;
+        }
+
+        $windownames = $driver->getWindowNames();
+        $currentwindow = array_search($driver->getWindowName(), $windownames);
+
+        if (count($windownames) == 1) {
+            throw new \Exception("Error : only one window is open.");
+        }
+
+        if ($currentwindow === count($windownames) - 1) {
+            $driver->switchToWindow(0);
+        } else {
+            $driver->switchToWindow($windownames[$currentwindow + 1]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * I Switch to the window
+     *
+     * @When I switch to the window "(?P<nb>\d+)"$/
+     *
+     * @param   int    $nb Window number where we want to switch.
+     * @param   bool   $internalfunction Whether to rely on drivers internal function or not.
+     * @throws  Exception If out of bounds window number is given.
+     * @return  FeatureContext
+     */
+    public function i_switch_to_the_window(int $nb, bool $internalfunction = false): self {
+        $driver = $this->getSession()->getDriver();
+
+        if (!$driver instanceof Selenium2Driver) {
+            return $this;
+        }
+
+        // We are using same internal function to get windownames.
+        $windownames = $driver->getWindowNames();
+
+        if (!$internalfunction && ( $nb < 0 || $nb >= count($windownames))) {
+            throw new \Exception(
+                sprintf(
+                    "Error : index of window out of bounds, given '%b' but number of windows is '%b'",
+                    $nb,
+                    count($windownames)
+                )
+            );
+        }
+        $driver->switchToWindow($windownames[$nb - 1]);
+
+        return $this;
     }
 }
