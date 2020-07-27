@@ -46,20 +46,30 @@ class backup_cleanup_task extends scheduled_task {
 
         $timenow = time();
 
-        // Delete old backup_controllers and logs.
+        // Delete old backup_controllers and logs excluding incompleted adhoc tasks.
         $loglifetime = get_config('backup', 'loglifetime');
         if (!empty($loglifetime)) {  // Value in days.
             $loglifetime = $timenow - ($loglifetime * 3600 * 24);
             // Delete child records from backup_logs.
-            $DB->execute("DELETE FROM {backup_logs}
-                           WHERE EXISTS (
-                               SELECT 'x'
-                                 FROM {backup_controllers} bc
-                                WHERE bc.backupid = {backup_logs}.backupid
-                                  AND bc.timecreated < ?)", array($loglifetime));
-            // Delete records from backup_controllers.
-            $DB->execute("DELETE FROM {backup_controllers}
-                          WHERE timecreated < ?", array($loglifetime));
+            $DB->execute("DELETE
+                            FROM {backup_logs}
+                           WHERE EXISTS (SELECT 'x'
+                                           FROM {backup_controllers} bc
+                                          WHERE bc.backupid = {backup_logs}.backupid
+                                            AND bc.timecreated < ? )
+                             AND NOT EXISTS (SELECT 'x'
+                                               FROM {task_adhoc} ta
+                                              WHERE ta.customdata LIKE CONCAT('%', {backup_logs}.backupid, '%'))",
+                array($loglifetime));
+
+            // Delete records from backup_controllers excluding incompleted adhoc tasks.
+            $DB->execute("DELETE
+                            FROM {backup_controllers}
+                           WHERE timecreated < ?
+                             AND NOT EXISTS (SELECT 'x'
+                                               FROM {task_adhoc} ta
+                                              WHERE ta.customdata LIKE CONCAT('%', {backup_controllers}.backupid, '%'))",
+                array($loglifetime));
         }
 
     }
