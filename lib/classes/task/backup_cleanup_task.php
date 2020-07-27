@@ -52,14 +52,28 @@ class backup_cleanup_task extends scheduled_task {
             $loglifetime = $timenow - ($loglifetime * 3600 * 24);
             // Delete child records from backup_logs.
             $DB->execute("DELETE FROM {backup_logs}
-                           WHERE EXISTS (
-                               SELECT 'x'
-                                 FROM {backup_controllers} bc
+                            WHERE EXISTS (
+                                SELECT 'x'
+                                FROM {backup_controllers} bc
                                 WHERE bc.backupid = {backup_logs}.backupid
-                                  AND bc.timecreated < ?)", array($loglifetime));
-            // Delete records from backup_controllers.
+                                AND bc.timecreated < ?
+                                AND NOT EXISTS (
+                                    SELECT 'x'
+                                    FROM {task_adhoc}
+                                    WHERE classname LIKE '%asynchronous_backup_task%'
+                                    AND bc.backupid = SUBSTRING(customdata, (INSTR(customdata, 'backupid') + 11), 32)
+                                )
+                            )", array($loglifetime));
+
+            // Delete records from backup_controllers excluding incompleted adhoc backup tasks.
             $DB->execute("DELETE FROM {backup_controllers}
-                          WHERE timecreated < ?", array($loglifetime));
+                            WHERE timecreated < ?
+                            AND NOT EXISTS (
+                              SELECT 'x'
+                              FROM {task_adhoc}
+                              WHERE classname LIKE '%asynchronous_backup_task%'
+                              AND {backup_controllers}.backupid = SUBSTRING(customdata, (INSTR(customdata, 'backupid') + 11), 32)
+                            )", array($loglifetime));
         }
 
     }
