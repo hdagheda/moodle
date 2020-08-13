@@ -22,10 +22,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['adhoc'] = 'Ad-hoc';
+$string['adhoctaskid'] = 'Ad-hoc task id: {$a}';
+$string['adhoctasks'] = 'Ad-hoc tasks';
 $string['asap'] = 'ASAP';
 $string['backtoscheduledtasks'] = 'Back to scheduled tasks';
 $string['blocking'] = 'Blocking';
 $string['cannotfindthepathtothecli'] = 'Cannot find the path to the PHP CLI executable so task execution aborted. Set the \'Path to PHP CLI\' setting in Site administration / Server / System paths.';
+$string['checkadhocqueue'] = 'Ad hoc task queue';
+$string['checkcronrunning'] = 'Cron running';
+$string['checkmaxfaildelay'] = 'Tasks max fail delay';
+$string['classname'] = 'Class name';
 $string['clearfaildelay_confirm'] = 'Are you sure you want to clear the fail delay for task \'{$a}\'? After clearing the delay, the task will run according to its normal schedule.';
 $string['component'] = 'Component';
 $string['corecomponent'] = 'Core';
@@ -39,17 +46,21 @@ $string['faildelay'] = 'Fail delay';
 $string['fromcomponent'] = 'From component: {$a}';
 $string['hostname'] = 'Host name';
 $string['lastruntime'] = 'Last run';
+$string['lastupdated'] = 'Last updated {$a}.';
 $string['nextruntime'] = 'Next run';
 $string['pid'] = 'PID';
 $string['plugindisabled'] = 'Plugin disabled';
 $string['pluginname'] = 'Scheduled task configuration';
 $string['resettasktodefaults'] = 'Reset task schedule to defaults';
 $string['resettasktodefaults_help'] = 'This will discard any local changes and revert the schedule for this task back to its original settings.';
+$string['runningtasks'] = 'Tasks running now';
 $string['runnow'] = 'Run now';
 $string['runnow_confirm'] = 'Are you sure you want to run this task \'{$a}\' now? The task will run on the web server and may take some time to complete.';
 $string['runpattern'] = 'Run pattern';
+$string['scheduled'] = 'Scheduled';
 $string['scheduledtasks'] = 'Scheduled tasks';
 $string['scheduledtaskchangesdisabled'] = 'Modifications to the list of scheduled tasks have been prevented in Moodle configuration';
+$string['started'] = 'Started';
 $string['taskdisabled'] = 'Task disabled';
 $string['tasklogs'] = 'Task logs';
 $string['taskscheduleday'] = 'Day';
