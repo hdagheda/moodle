@@ -4,9 +4,78 @@ information provided here is intended especially for developers.
 === 3.7.7 ===
 * The `$CFG->behat_retart_browser_after` configuration setting has been removed.
   The browser session is now restarted between all tests.
+* add_to_log() has been through final deprecation, please rewrite your code to the new events API.
+* The following functions have been finally deprecated and can not be used anymore:
+  - print_textarea
+  - calendar_get_all_allowed_types
+  - groups_get_all_groups_for_courses
+  - events_get_cached
+  - events_uninstall
+  - events_cleanup
+  - events_dequeue
+  - events_get_handlers
+  - get_roles_on_exact_context
+  - get_roles_with_assignment_on_context
+  - message_add_contact
+  - message_remove_contact
+  - message_unblock_contact
+  - message_block_contact
+  - message_get_contact
+* The following renamed classes have been completely removed:
+    - course_in_list (now: core_course_list_element)
+    - coursecat (now: core_course_category)
+* The form element 'htmleditor', which was deprecated in 3.6, has been removed.
+* The `core_output_load_fontawesome_icon_map` web service has been deprecated and replaced by
+  `core_output_load_fontawesome_icon_system_map` which takes the name of the theme to generate the icon system map for.
+* The class coursecat_sortable_records has been removed.
+* Admin setting admin_setting_configselect now supports lazy-loading the options list by supplying
+  a callback function instead of an array of options.
+* Admin setting admin_setting_configselect now supports validating the selection by supplying a
+  callback function.
+* The task system has new functions adhoc_task_starting() and scheduled_task_starting() which must
+  be called before executing a task, and a new function \core\task\manager::get_running_tasks()
+  returns information about currently-running tasks.
 
-=== 3.7.6 ===
-* database_manager::check_database_schema() now checks for missing indexes.
+=== 3.9 ===
+* Following function has been deprecated, please use \core\task\manager::run_from_cli().
+    - cron_run_single_task()
+* Following class has been deprecated, please use \core\task\manager.
+    - \tool_task\run_from_cli
+* Following CLI scripts has been deprecated:
+  - admin/tool/task/cli/schedule_task.php please use admin/cli/scheduled_task.php
+  - admin/tool/task/cli/adhoc_task.php please use admin/cli/adhoc_task.php
+* Old Safe Exam Browser quiz access rule (quizaccess_safebrowser) replaced by new Safe Exam Browser access rule (quizaccess_seb).
+  Experimental setting enablesafebrowserintegration was deleted.
+* New CFPropertyList library has been added to Moodle core in /lib/plist.
+* behat_data_generators::the_following_exist() has been removed, please use
+  behat_data_generators::the_following_entities_exist() instead. See MDL-67691 for more info.
+* admin/tool/task/cli/adhoc_task.php now observers the concurrency limits.
+  If you want to get the previous (unlimited) behavior, use the --ignorelimits switch).
+* Removed the following deprecated functions:
+  - question_add_tops
+  - question_is_only_toplevel_category_in_context
+* format_float() now accepts a special value (-1) as the $decimalpoints parameter
+  which means auto-detecting number of decimal points.
+* plagiarism_save_form_elements() has been deprecated. Please use {plugin name}_coursemodule_edit_post_actions() instead.
+* plagiarism_get_form_elements_module() has been deprecated. Please use {plugin name}_coursemodule_standard_elements() instead.
+* Changed default sessiontimeout to 8 hours to cover most normal working days
+* Plugins can now explicitly declare supported and incompatible Moodle versions in version.php
+  - $plugin->supported = [37,39];
+    supported takes an array of ascending numbers, that correspond to a range of branch numbers of supported versions, inclusive.
+    Moodle versions that are outside of this range will produce a message notifying at install time, but will allow for installation.
+  - $plugin->incompatible = 36;
+    incompatible takes a single int corresponding to the first incompatible branch. Any Moodle versions including and
+    above this will be prevented from installing the plugin, and a message will be given when attempting installation.
+* Added the <component>_bulk_user_actions() callback which returns a list of custom action_links objects
+* Add 'required' admin flag for mod forms allows elements to be toggled between being required or not in admin settings.
+  - In mod settings, along with lock, advanced flags, the required flag can now be set with $setting->set_required_flag_options().
+    The name of the admin setting must be exactly the same as the mod_form element.
+  - Currently supported by:
+    - mod_assign
+    - mod_quiz
+* Added a native MySQL / MariaDB lock implementation
+* The database drivers (moodle_database and subclasses) don't need to implement get_columns() anymore.
+  They have to implement fetch_columns instead.
 * Added function cleanup_after_drop to the database_manager class to take care of all the cleanups that need to be done after a table is dropped.
 
 === 3.7.5 ===
