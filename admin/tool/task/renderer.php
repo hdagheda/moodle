@@ -174,6 +174,116 @@ class tool_task_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Nicely display the name of a component, with its disabled status and internal name.
+     *
+     * @param string $component component name, e.g. 'core' or 'mod_forum'.
+     * @return string HTML.
+     */
+    public function component_name(string $component): string {
+        list($type) = core_component::normalize_component($component);
+        if ($type === 'core') {
+            return get_string('corecomponent', 'tool_task');
+        }
+
+        $plugininfo = core_plugin_manager::instance()->get_plugin_info($component);
+        if (!$plugininfo) {
+            return $component;
+        }
+
+        $plugininfo->init_display_name();
+
+        $componentname = $plugininfo->displayname;
+        if ($plugininfo->is_enabled() === false) {
+            $componentname .= ' ' . html_writer::span(
+                            get_string('disabled', 'tool_task'), 'badge badge-secondary');
+        }
+        $componentname .= "\n" . html_writer::span($plugininfo->component, 'task-class text-ltr');
+
+        return $componentname;
+    }
+
+    /**
+     * Standard display of a tasks last run time.
+     *
+     * @param scheduled_task $task
+     * @return string HTML.
+     */
+    public function last_run_time(scheduled_task $task): string {
+        if ($task->get_last_run_time()) {
+            return userdate($task->get_last_run_time());
+        } else {
+            return get_string('never');
+        }
+    }
+
+    /**
+     * Standard display of a tasks next run time.
+     *
+     * @param scheduled_task $task
+     * @return string HTML.
+     */
+    public function next_run_time(scheduled_task $task): string {
+        $plugininfo = core_plugin_manager::instance()->get_plugin_info($task->get_component());
+
+        $nextrun = $task->get_next_run_time();
+        if ($plugininfo && $plugininfo->is_enabled() === false && !$task->get_run_if_component_disabled()) {
+            $nextrun = get_string('plugindisabled', 'tool_task');
+        } else if ($task->get_disabled()) {
+            $nextrun = get_string('taskdisabled', 'tool_task');
+        } else if ($nextrun > time()) {
+            $nextrun = userdate($nextrun);
+        } else {
+            $nextrun = get_string('asap', 'tool_task');
+        }
+
+        return $nextrun;
+    }
+
+    /**
+     * Get a table cell to show one time, comparing it to the default.
+     *
+     * @param string $current the current setting.
+     * @param string $default the default setting from the db/tasks.php file.
+     * @return html_table_cell for use in the table.
+     */
+    protected function time_cell(string $current, string $default): html_table_cell {
+        $cell = new html_table_cell($current);
+        // Cron-style values must always be LTR.
+        $cell->attributes['class'] = 'text-ltr';
+
+        // If the current value is default, that is all we want to do.
+        if ($default === '*') {
+            if ($current === '*') {
+                return $cell;
+            }
+        } else if ($default === 'R' ) {
+            if (is_numeric($current)) {
+                return $cell;
+            }
+        } else {
+            if ($default === $current) {
+                return $cell;
+            }
+        }
+
+        // Otherwise, highlight and show the default.
+        $cell->attributes['class'] .= ' table-warning';
+        $cell->text .= ' ' . html_writer::span(
+                get_string('defaultx', 'tool_task', $default), 'task-class');
+        return $cell;
+    }
+
+    /**
+     * Displays a warning on the page if cron is disabled.
+     *
+     * @return string HTML code for information about cron being disabled
+     * @throws moodle_exception
+     */
+    public function cron_disabled(): string {
+        return $this->output->notification(get_string('crondisabled', 'tool_task'), 'warning');
+    }
+
+    /**
      * Renders a link back to the scheduled tasks page (used from the 'run now' screen).
      *
      * @return string HTML code
