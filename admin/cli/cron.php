@@ -65,9 +65,6 @@ if ($options['help']) {
 "Execute periodic cron actions.
 
 Options:
-<<<<<<< HEAD
--h, --help            Print out this help
-=======
 -h, --help               Print out this help
 -s, --stop               Notify all other running cron processes to stop after the current task
 -l, --list               Show the list of currently running tasks and how long they have been running
@@ -75,7 +72,6 @@ Options:
 -e, --enable             Enable cron
 -d, --disable            Disable cron
 -w, --disable-wait=600   Disable cron and wait until all tasks finished or fail after N seconds (optional param)
->>>>>>> d7342dc2397... MDL-67211 Tasks: Add cron_enabled setting.
 
 Example:
 \$sudo -u www-data /usr/bin/php admin/cli/cron.php
@@ -85,8 +81,6 @@ Example:
     die;
 }
 
-<<<<<<< HEAD
-=======
 if ($options['stop']) {
     // By clearing the caches this signals to other running processes
     // to exit after finishing the current task.
@@ -181,5 +175,4 @@ if (!get_config('core', 'cron_enabled') && !$options['force']) {
 
 \core\local\cli\shutdown::script_supports_graceful_exit();
 
->>>>>>> d7342dc2397... MDL-67211 Tasks: Add cron_enabled setting.
 cron_run();
