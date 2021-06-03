@@ -1,0 +1,58 @@
+commit 7eec7394f4a8eb18c0d16cb48cb1b242866f38a1
+Author: Brendan Heywood <brendan@catalyst-au.net>
+Date:   Mon Dec 30 12:51:14 2019 +1100
+
+    MDL-59594 cron: Allow graceful exit of cron and adhoc task cli's
+
+commit b793ce1ec9ba1cf97032a967a93d710f2bedded0
+Author: Brendan Heywood <brendan@catalyst-au.net>
+Date:   Wed Jul 31 18:07:39 2019 +1000
+
+    MDL-59594 cli: Introduce cli helpers for graceful exits
+    
+        \core\local\cli\shutdown::script_supports_graceful_exit();
+    
+        Sets up interception of exit signals and keep the script running.
+    
+        \core\local\cli\shutdown::should_gracefully_exit();
+    
+        Use this to check whether you should exit, often inside a long running loop.
+
+commit bba48a65bbad31148ff278cec86a0f294407379b
+Author: Brendan Heywood <brendan@catalyst-au.net>
+Date:   Tue Jul 30 23:58:29 2019 +1000
+
+    MDL-59594 core: Allow custom signal handlers
+
+commit c282319a35e4a3dd190514064a733b4f6188e692
+Merge: d29c986d9d9 b15c53f4fa0
+Author: Adrian Greeve <abgreeve@gmail.com>
+Date:   Mon Jan 20 10:38:51 2020 +0800
+
+    Merge branch 'MDL-59594-SIGINT' of https://github.com/brendanheywood/moodle
+
+commit b15c53f4fa012f2c505e1e30dc53a5b44cc2ed89
+Author: Brendan Heywood <brendan@catalyst-au.net>
+Date:   Mon Dec 30 12:51:14 2019 +1100
+
+    MDL-59594 cron: Allow graceful exit of cron and adhoc task cli's
+
+commit 176b5202e0f367d467c7c4f1706418407e08c50a
+Author: Brendan Heywood <brendan@catalyst-au.net>
+Date:   Wed Jul 31 18:07:39 2019 +1000
+
+    MDL-59594 cli: Introduce cli helpers for graceful exits
+    
+        \core\local\cli\shutdown::script_supports_graceful_exit();
+    
+        Sets up interception of exit signals and keep the script running.
+    
+        \core\local\cli\shutdown::should_gracefully_exit();
+    
+        Use this to check whether you should exit, often inside a long running loop.
+
+commit 29e3a223f50677d8b7425a4b47d5cbbcaafc8751
+Author: Brendan Heywood <brendan@catalyst-au.net>
+Date:   Tue Jul 30 23:58:29 2019 +1000
+
+    MDL-59594 core: Allow custom signal handlers
