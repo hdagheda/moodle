@@ -1,0 +1,24 @@
+root@b470566306ae:/siteroot# php admin/cli/upgrade.php 
+== Upgrading Moodle database from version 3.7.9 (Build: 20201109) (2019052009) to 3.7.9 (Build: 20201109) (2019052009.001) ==
+
+Your Moodle files have been changed, and you are about to automatically
+upgrade your server to this version:
+
+3.7.9 (BUILD: 20201109) (2019052009.001)
+
+Once you do this you can not go back again. Please note that this process
+can take a long time.
+
+Are you sure you want to upgrade this server to this version?
+
+type y (means yes) or n (means no)
+: y
+-->System
+++ 2019052009.001: Success (0.24 seconds) ++
+++ Success (1.08 seconds) ++
+-->tool_task
+++ 2019052000.001: Success (0.02 seconds) ++
+++ Success (0.04 seconds) ++
+== Setting new default values ==
+New setting: taskprocessing_cron_enabled
+Command line upgrade from 3.7.9 (Build: 20201109) (2019052009) to 3.7.9 (Build: 20201109) (2019052009.001) completed successfully.

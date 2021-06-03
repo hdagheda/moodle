@@ -1,0 +1,3 @@
+Additional Trackers requires this to work: 
+
+https://tracker.moodle.org/browse/MDL-59594

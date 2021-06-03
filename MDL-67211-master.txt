@@ -1,0 +1,43 @@
+commit 517ac3f3bbe35cb38afab7e4ffc79edd1ec6a668
+Merge: 2830f39bc20 674f126d0b6
+Author: Andrew Nicols <andrew@nicols.co.uk>
+Date:   Thu Aug 27 12:47:59 2020 +0800
+
+    Merge branch 'master-MDL-67211_v6' of https://github.com/golenkovm/moodle
+
+commit 674f126d0b60f3e0db44f394749730a7825d110a
+Author: Mikhail Golenkov <mikhailgolenkov@catalyst-au.net>
+Date:   Thu Aug 27 13:02:36 2020 +1000
+
+    MDL-67211 phpunit: Do not test the order of the running adhoc tasks.
+
+commit 23517d90344b6cc82c9aa8b5b77d654a5a16eb98
+Merge: 20c84b6cc28 d7342dc2397
+Author: Andrew Nicols <andrew@nicols.co.uk>
+Date:   Wed Aug 26 09:37:16 2020 +0800
+
+    Merge branch 'master-MDL-67211_v6' of https://github.com/golenkovm/moodle
+
+commit d7342dc23972b430b5995f6d0fe6fb878ef5a65a
+Author: Mikhail Golenkov <mikhailgolenkov@catalyst-au.net>
+Date:   Tue Aug 25 16:49:20 2020 +1000
+
+    MDL-67211 Tasks: Add cron_enabled setting.
+    
+    Co-authored-by: Sam Marshall <s.marshall@open.ac.uk>
+
+commit 45875f6f7ba0474a2907df7ec5530b7eed993890
+Author: Mikhail Golenkov <mikhailgolenkov@catalyst-au.net>
+Date:   Thu Aug 13 17:44:13 2020 +1000
+
+    MDL-67211 Tasks: Front-end to display currently running tasks.
+    
+    Co-authored-by: Sam Marshall <s.marshall@open.ac.uk>
+
+commit b465a541ae8441abb10880cd4b704701824ba888
+Author: Mikhail Golenkov <mikhailgolenkov@catalyst-au.net>
+Date:   Tue Aug 25 17:08:03 2020 +1000
+
+    MDL-67211 Tasks: Record when a task is running.
+    
+    Co-authored-by: Sam Marshall <s.marshall@open.ac.uk>
